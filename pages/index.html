@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Coin Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        th {
+            background-color: #222;
+        }
+        tr:hover {
+            background-color: #333;
+        }
+        .positive {
+            color: #0f0;
+        }
+        .negative {
+            color: #f00;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #444;
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background-color: #555;
+        }
+        .avatar {
+            display: flex;
+            align-items: center;
+        }
+        .avatar img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Coin Market Overview</h1>
+    <table id="coinTable">
+        <thead>
+            <tr>
+                <th>Agent Name</th>
+                <th>Mindshare</th>
+                <th>Mindshare Δ7D</th>
+                <th>Market Cap</th>
+                <th>Market Cap Δ7D</th>
+                <th>Price</th>
+                <th>Δ7D</th>
+                <th>Holders</th>
+                <th>Δ7D Holders</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Veri dinamik olarak buraya eklenecek -->
+        </tbody>
+    </table>
+    <div class="pagination">
+        <button onclick="prevPage()">Previous</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    <script>
+        // Örnek veri
+        const coins = [
+            {
+                avatar: "https://via.placeholder.com/30",
+                name: "FARTCOIN",
+                mindshare: "20.51%",
+                mindshareChange: "+6.3",
+                marketCap: "$643.88M",
+                marketCapChange: "-27%",
+                price: "$0.66",
+                priceChange: "-27%",
+                holders: "55.13K",
+                holdersChange: "+1.5K",
+            },
+            {
+                avatar: "https://via.placeholder.com/30",
+                name: "AI16Z",
+                mindshare: "4.85%",
+                mindshareChange: "-0.62",
+                marketCap: "$636.88M",
+                marketCapChange: "-30%",
+                price: "$0.5777",
+                priceChange: "-30%",
+                holders: "45.91K",
+                holdersChange: "-1.2K",
+            },
+            // Daha fazla veri buraya eklenebilir...
+        ];
+
+        let currentPage = 1;
+        const rowsPerPage = 5;
+
+        function displayTable(page) {
+            const tableBody = document.querySelector('#coinTable tbody');
+            tableBody.innerHTML = '';
+
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const currentCoins = coins.slice(start, end);
+
+            currentCoins.forEach(coin => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td class="avatar">
+                        <img src="${coin.avatar}" alt="${coin.name}" />
+                        ${coin.name}
+                    </td>
+                    <td>${coin.mindshare}</td>
+                    <td class="${parseFloat(coin.mindshareChange) >= 0 ? 'positive' : 'negative'}">
+                        ${coin.mindshareChange}
+                    </td>
+                    <td>${coin.marketCap}</td>
+                    <td class="${parseFloat(coin.marketCapChange) >= 0 ? 'positive' : 'negative'}">
+                        ${coin.marketCapChange}
+                    </td>
+                    <td>${coin.price}</td>
+                    <td class="${parseFloat(coin.priceChange) >= 0 ? 'positive' : 'negative'}">
+                        ${coin.priceChange}
+                    </td>
+                    <td>${coin.holders}</td>
+                    <td class="${parseFloat(coin.holdersChange) >= 0 ? 'positive' : 'negative'}">
+                        ${coin.holdersChange}
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function nextPage() {
+            if (currentPage * rowsPerPage < coins.length) {
+                currentPage++;
+                displayTable(currentPage);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTable(currentPage);
+            }
+        }
+
+        // Sayfa yüklendiğinde tabloyu göster
+        displayTable(currentPage);
+    </script>
+</body>
+</html>
